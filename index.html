@@ -53,9 +53,9 @@ body{
 
 /* ───────── 翻頁 deck（三頁） ───────── */
 .deck{flex:1;min-height:0;position:relative;overflow:hidden;margin:0 -4px;}
-.track{display:flex;width:400%;height:100%;align-items:stretch;}
+.track{display:flex;width:500%;height:100%;align-items:stretch;}
 body.ready .track{transition:transform .5s var(--ease);}
-.slide{width:25%;flex:none;height:100%;min-height:0;padding:4px;
+.slide{width:20%;flex:none;height:100%;min-height:0;padding:4px;
   opacity:.35;transform:scale(.98);transition:opacity .42s var(--ease),transform .42s var(--ease);}
 .slide.on{opacity:1;transform:none;}
 .slide[data-view="map"]{display:flex;}
@@ -319,6 +319,7 @@ select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(41,171,226,.16);
       <button class="tabbtn active" data-view="map">對焦圖</button>
       <button class="tabbtn" data-view="dashboard">儀表板</button>
       <button class="tabbtn" data-view="projects">任務</button>
+      <button class="tabbtn" data-view="rules">規則</button>
       <button class="tabbtn" data-view="methods">三個方法</button>
     </div>
     <div class="authchip" id="authChip" hidden></div>
@@ -411,6 +412,27 @@ select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(41,171,226,.16);
           <div class="listcard" id="listCard"></div>
           <div class="projfoot"><span class="note">資料存在 Supabase（登入後自動同步、多人共用）；本機留一份離線快取。</span>
             <button class="btn btn-danger btn-sm" id="clearBtn">清空全部</button></div>
+        </div>
+      </section>
+
+      <!-- 個人規則（C 規則） -->
+      <section class="slide" data-view="rules">
+        <div class="card projcard">
+          <div class="projhead">
+            <div><div class="ph-title">個人規則</div><div class="ph-sub">命中「寄件者 + 主旨關鍵字」就把 email 待辦覆寫到指定層級 · tracer 跑前自動套用</div></div>
+          </div>
+          <div class="rulesform" style="display:grid;grid-template-columns:1fr 1fr 110px;gap:8px;margin-bottom:6px">
+            <div class="field"><label>寄件者含（email 子字串）</label><input id="ruleSender" type="text" placeholder="allenzeng@witsper.com"></div>
+            <div class="field"><label>主旨關鍵字（逗號分隔，留空＝不看主旨）</label><input id="ruleKeywords" type="text" placeholder="目標, 品牌, 渠道"></div>
+            <div class="field"><label>覆寫成</label><select id="ruleTier"><option value="ACTION">ACTION</option><option value="ATTEND">ATTEND</option><option value="IGNORE">IGNORE</option></select></div>
+          </div>
+          <div class="rulesform" style="display:grid;grid-template-columns:1fr 110px;gap:8px;align-items:end;margin-bottom:14px">
+            <div class="field"><label>說明（給自己看）</label><input id="ruleNote" type="text" placeholder="為什麼這條重要"></div>
+            <button class="btn btn-primary btn-sm" id="ruleAdd" style="height:38px">＋ 新增規則</button>
+          </div>
+          <div class="ph-title" style="font-size:14px;margin-bottom:8px">目前規則</div>
+          <div class="listcard" id="rulesCard"></div>
+          <div class="projfoot"><span class="note">規則存在 Supabase；email tracer 每次跑前會拉最新的這份套用。停用＝保留但暫時不套。</span></div>
         </div>
       </section>
 
@@ -535,7 +557,7 @@ select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(41,171,226,.16);
 <script>
 "use strict";
 
-const KEY='witsper-projects', VIEW_KEY='witsper-view', VIEWS=['map','dashboard','projects','methods'];
+const KEY='witsper-projects', VIEW_KEY='witsper-view', VIEWS=['map','dashboard','projects','rules','methods'];
 const REV={
   oneway:{label:'單向門',tag:'I',full:'不可逆',color:'#C0392B'},
   twoway:{label:'雙向門',tag:'II',full:'可逆',color:'#5B6B7A'},
@@ -760,6 +782,63 @@ async function rejectCandidate(id){
   const {error}=await sb.from('dfg_projects').delete().eq('id',id).eq('status','pending');  // 只刪 pending：擋 TOCTOU（若已被接受翻 active 就變無害 no-op）
   if(error){console.warn('拒絕失敗',error);return;}
   loadStaging();
+}
+
+/* ── 個人規則（C 規則）CRUD：寫 dfg_email_rules，tracer 跑前拉來套 ── */
+let rulesRows=[];
+async function loadRules(){
+  if(!session)return;
+  const box=$('rulesCard');
+  const {data:rows,error}=await sb.from('dfg_email_rules').select('*').order('created_at',{ascending:false});
+  if(error){console.warn('讀規則失敗',error);if(box)box.innerHTML='<div class="listempty">規則載入失敗（看 console）。</div>';return;}
+  renderRules(rows||[]);
+}
+function renderRules(rows){
+  rulesRows=rows;
+  const box=$('rulesCard');if(!box)return;
+  if(!rows.length){box.innerHTML='<div class="listempty">還沒有任何規則。<br>上面填「寄件者 + 主旨關鍵字 → 覆寫成哪一層」就會出現在這裡。</div>';return;}
+  box.innerHTML=rows.map(r=>{
+    const meta=[];
+    meta.push('寄件者含「'+esc(r.sender_substr||'')+'」');
+    meta.push(r.subject_keywords?('主旨含「'+esc(r.subject_keywords)+'」任一'):'不看主旨');
+    meta.push('→ '+esc(r.target_tier));
+    return '<div class="listrow rulerow" data-id="'+r.id+'"'+(r.enabled?'':' style="opacity:.5"')+'>'
+      +'<span class="lmain"><span class="lname">'+esc(r.note||r.sender_substr||'(規則)')+'</span>'
+      +'<span class="lnote">'+meta.join(' · ')+'</span></span>'
+      +'<span class="stageact">'
+      +'<button class="btn btn-sm" data-act="toggle">'+(r.enabled?'停用':'啟用')+'</button>'
+      +'<button class="btn btn-danger btn-sm" data-act="del">刪除</button></span></div>';
+  }).join('');
+  box.querySelectorAll('.rulerow').forEach(row=>{const id=row.dataset.id;
+    row.querySelector('[data-act="toggle"]').addEventListener('click',()=>toggleRule(id));
+    row.querySelector('[data-act="del"]').addEventListener('click',()=>deleteRule(id));});
+}
+async function addRule(){
+  if(!session){alert('請先登入');return;}
+  const sender=$('ruleSender').value.trim();
+  const tier=$('ruleTier').value;
+  if(!sender){alert('寄件者子字串不可空白');return;}
+  const {error}=await sb.from('dfg_email_rules').insert({
+    sender_substr:sender,
+    subject_keywords:$('ruleKeywords').value.trim(),
+    target_tier:tier,
+    note:$('ruleNote').value.trim(),
+  });
+  if(error){console.warn('新增規則失敗',error);alert('新增失敗：'+error.message);return;}
+  $('ruleSender').value='';$('ruleKeywords').value='';$('ruleNote').value='';$('ruleTier').value='ACTION';
+  loadRules();
+}
+async function toggleRule(id){
+  const r=rulesRows.find(x=>x.id===id);if(!r)return;
+  const {error}=await sb.from('dfg_email_rules').update({enabled:!r.enabled}).eq('id',id);
+  if(error){console.warn('切換規則失敗',error);return;}
+  loadRules();
+}
+async function deleteRule(id){
+  if(!window.confirm('刪除這條規則？'))return;
+  const {error}=await sb.from('dfg_email_rules').delete().eq('id',id);
+  if(error){console.warn('刪除規則失敗',error);return;}
+  loadRules();
 }
 
 /* ── 登入 UI helpers ── */
@@ -1102,6 +1181,7 @@ function applyView(){
   document.querySelectorAll('.slide').forEach(s=>s.classList.toggle('on',s.dataset.view===activeView));
   document.querySelectorAll('.tabbtn').forEach(b=>b.classList.toggle('active',b.dataset.view===activeView));
   if(activeView==='projects'&&session)loadStaging();   // 進任務頁順手刷新待審
+  if(activeView==='rules'&&session)loadRules();         // 進規則頁順手刷新規則
   positionPill();syncHeight();
 }
 function positionPill(){
@@ -1132,6 +1212,7 @@ $('exportShareHtml').addEventListener('click',downloadShareHTML);
 $('exportFmtSeg').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{exportFmt=b.dataset.f;setSegF();$('exportText').value=buildExport();}));
 $('clearBtn').addEventListener('click',clearAll);
 $('stagingRefresh').addEventListener('click',loadStaging);
+$('ruleAdd').addEventListener('click',addRule);
 $('undoBtn').addEventListener('click',applyUndo);
 $('redoBtn').addEventListener('click',applyRedo);
 document.addEventListener('keydown',e=>{
