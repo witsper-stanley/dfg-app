@@ -320,7 +320,7 @@ select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(41,171,226,.16);
       <button class="tabbtn" data-view="dashboard">儀表板</button>
       <button class="tabbtn" data-view="projects">任務</button>
       <button class="tabbtn" data-view="rules">規則</button>
-      <button class="tabbtn" data-view="methods">三個方法</button>
+      <button class="tabbtn" data-view="methods">規則說明</button>
     </div>
     <div class="authchip" id="authChip" hidden></div>
   </div>
@@ -436,38 +436,38 @@ select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(41,171,226,.16);
         </div>
       </section>
 
-      <!-- 三個方法 -->
+      <!-- 規則說明 -->
       <section class="slide" data-view="methods">
         <div class="card methodspage">
           <div class="mp-head">
-            <div class="mp-eyebrow">三個方法 · 把紅點變灰藍</div>
-            <div class="mp-title">把單向門工程化成雙向門</div>
-            <div class="mp-intro">圖上最有價值的設計動作不是把點分類，而是把「紅點（單向門）」往「灰藍（雙向門）」推。下面三個方法，讓你看著圖上的紅點時，直接想到怎麼把它變得更好處理。</div>
+            <div class="mp-eyebrow">規則說明 · 讓重要的信不會被埋掉</div>
+            <div class="mp-title">「規則」分頁怎麼用最好</div>
+            <div class="mp-intro">Email 待辦進來時，系統用「指令 × 重要」兩軸自動分成 ACTION（要我做）／ATTEND（我得留意）／IGNORE（不展開）。規則是你的個人化旋鈕——當某個寄件者的某類信你每次都想拉上來、或壓下去，就加一條，下次自動套用。</div>
           </div>
           <div class="mp-grid">
             <div class="mp-col">
-              <div class="mp-num">01</div><div class="mp-name">縮形</div>
-              <div class="mp-sub">把承諾在時間、範圍、量級上縮小</div>
-              <div class="mp-body">最便宜、也最常被忽略的一條。同一個決定，可以選擇承諾「全部」或「一小塊」。決定的本質沒換，只換了承諾的形狀。</div>
-              <div class="mp-ex">三年租約 → 一年加續租權 · 正式聘用 → 三個月顧問 · 全通路上線 → 一個通路試水 · 一筆大採購 → 首批小單加補貨節奏</div>
-              <div class="mp-coda">當你想動但不確定，預設選最小可行的那個形狀。</div>
+              <div class="mp-num">01</div><div class="mp-name">規則怎麼運作</div>
+              <div class="mp-sub">寄件者 ＋ 主旨關鍵字 → 覆寫層級</div>
+              <div class="mp-body">一條規則＝「寄件者命中」且「主旨關鍵字任一命中」時，把那封信<b>直接覆寫</b>成你指定的層級。每次掃信前系統會自動把你「啟用中」的規則套上，只動命中的信，不影響其他信。</div>
+              <div class="mp-ex">boss@witsper.com ＋ 主旨含「報表／月結」 → ACTION · newsletter@ ＋（主旨留空）→ IGNORE</div>
+              <div class="mp-coda">規則只是改「分到哪一層」，位置仍由你在對焦圖上拖。</div>
             </div>
             <div class="mp-col">
-              <div class="mp-num">02</div><div class="mp-name">先試再進</div>
-              <div class="mp-sub">把一個大決定拆成「試 → 進」兩步</div>
-              <div class="mp-body">跟縮形相關但形態不同——重點是先做一個結構不同的小版本，用小版本的結果決定要不要進到大版本。</div>
-              <div class="mp-ex">三個月顧問 → 全職聘用 · 合資公司 → 併購 · 限定市場 pilot → 全面上線 · 內部試辦 → 全公司化</div>
-              <div class="mp-coda">試的版本要設計成「即使失敗也學到東西」——這樣即使沒進到大版本，投入也不算浪費。</div>
+              <div class="mp-num">02</div><div class="mp-name">三個欄位怎麼填</div>
+              <div class="mp-sub">寄件者含 · 主旨關鍵字 · 覆寫成</div>
+              <div class="mp-body"><b>寄件者含</b>：填 email 的一段就好（整個網域如 <code>@vip-client.com</code>、或某人 <code>boss@</code>）。<b>主旨關鍵字</b>：逗號分隔、任一命中即算；<b>留空＝不看主旨、只認寄件者</b>。<b>覆寫成</b>：ACTION／ATTEND／IGNORE 三選一。中英文都行、大小寫不拘。</div>
+              <div class="mp-ex">想抓某客戶所有信 → 寄件者填網域、主旨留空、覆寫 ATTEND</div>
+              <div class="mp-coda">越精準的規則越安全；範圍開太大會把不相干的信也掃進來。</div>
             </div>
             <div class="mp-col">
-              <div class="mp-num">03</div><div class="mp-name">為易撤回而設計實作</div>
-              <div class="mp-sub">在執行層，讓「拆掉」這件事本身便宜</div>
-              <div class="mp-body">決定本身可能不可逆，但執行的結構可以設計成易於替換。用設計的代價，買運作的彈性。</div>
-              <div class="mp-ex">模組化而非一體化 · 標準介面而非客製化 · 子公司而非完全整併 · 軟體用 feature flag · 不要把品牌全壓在一家供應商</div>
-              <div class="mp-coda">Toyota 的 Andon Cord 是同一精神在文化層的版本——任何人都可以停線。</div>
+              <div class="mp-num">03</div><div class="mp-name">最佳用法（心法）</div>
+              <div class="mp-sub">ACTION 要乾淨、噪音往下壓</div>
+              <div class="mp-body">別用規則把一堆信「全拉成 ACTION」——那會灌爆待辦、失去意義。只加兩種：①「真的每次都要我親自動手」的 → ACTION／ATTEND；②「固定的電子報、系統通知」的噪音 → IGNORE。用一陣子，發現某類信你每次都想怎樣，才補一條。</div>
+              <div class="mp-ex">VIP／老闆的某類信即使語氣不像指令也拉上來 · 報價單、發票留意但不急 → ATTEND</div>
+              <div class="mp-coda">暫時不想套用就「停用」（保留隨時開回），確定不要才「刪除」。</div>
             </div>
           </div>
-          <div class="mp-ref">「單向門 / 雙向門」概念出自 Amazon Bezos 的 Type 1 / Type 2 決策框架。</div>
+          <div class="mp-ref">規則存在雲端、即時生效；下次 email 進來就按新規則分層。分錯了？接受待審後，層級與位置都還能在對焦圖上手動調整。</div>
         </div>
       </section>
 
