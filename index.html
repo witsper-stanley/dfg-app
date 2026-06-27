@@ -727,6 +727,7 @@ function renderStaging(rows){
     meta.push('卡在 '+esc(wl));
     if(r.deadline)meta.push('期限 '+esc(r.deadline));
     if(typeof r.email_importance==='number')meta.push('重要 '+r.email_importance.toFixed(1));
+    if(typeof r.email_directive==='number')meta.push('指令 '+r.email_directive.toFixed(1));
     // ↗ 回源頭：只信任 https 連結（email-intake 已白名單到 mail.google.com）
     const linkHtml=(r.link&&/^https:\/\//i.test(r.link))?' <a class="linkicon" href="'+esc(r.link)+'" target="_blank" rel="noopener noreferrer" title="開啟來源">↗</a>':'';
     return '<div class="listrow stagerow" data-id="'+r.id+'">'
@@ -742,7 +743,10 @@ function renderStaging(rows){
     row.querySelector('[data-act="reject"]').addEventListener('click',()=>rejectCandidate(id));});
 }
 async function acceptCandidate(id){
-  clearTimeout(syncTimer);   // 擋掉排隊中的 reconcile，避免 update→pull 空窗被誤刪
+  clearTimeout(syncTimer);   // 擋掉排隊中的 reconcile
+  // 若有 in-flight sbSync（已抓舊 ids、正在跑 reconcile-delete），先等它跑完再翻 active；
+  // 否則它的 NOT IN(舊ids) 會把剛接受的列誤刪（審查確認的 race，必須 gate 在 update 之前）。
+  while(syncing)await new Promise(r=>setTimeout(r,60));
   const {error}=await sb.from('dfg_projects').update({status:'active'}).eq('id',id);
   if(error){console.warn('接受失敗',error);return;}
   // 樂觀補進本地 data（讓萬一在 pull 前觸發的 reconcile 也含這個 id，不會誤刪）
@@ -753,7 +757,7 @@ async function acceptCandidate(id){
 }
 async function rejectCandidate(id){
   if(!window.confirm('拒絕並刪除這筆待審？'))return;
-  const {error}=await sb.from('dfg_projects').delete().eq('id',id);  // pending 列才會走到這（reconcile 不碰）
+  const {error}=await sb.from('dfg_projects').delete().eq('id',id).eq('status','pending');  // 只刪 pending：擋 TOCTOU（若已被接受翻 active 就變無害 no-op）
   if(error){console.warn('拒絕失敗',error);return;}
   loadStaging();
 }
