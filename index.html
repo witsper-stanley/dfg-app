@@ -719,12 +719,20 @@ function renderStaging(rows){
   stagingRows=rows;
   const box=$('stagingCard');if(!box)return;
   const tab=$('stagingTabCount');if(tab){tab.textContent=rows.length;tab.style.display=rows.length?'':'none';}
-  if(!rows.length){box.innerHTML='<div class="listempty">沒有待審項目。<br>在 Slack 任一訊息點「⋯」→「送到對焦圖」，就會出現在這裡。</div>';return;}
+  if(!rows.length){box.innerHTML='<div class="listempty">沒有待審項目。<br>Slack 訊息點「⋯」→「送到對焦圖」，或 email 待辦自動進來，就會出現在這裡。</div>';return;}
   box.innerHTML=rows.map(r=>{
     const who=blockerToWho(r.blocker_id),wl=WHO[who]?WHO[who].label:'?';
+    const meta=[];
+    if(r.source==='email')meta.push('來自 Email'); else if(r.source==='slack')meta.push('來自 Slack');
+    meta.push('卡在 '+esc(wl));
+    if(r.deadline)meta.push('期限 '+esc(r.deadline));
+    if(typeof r.email_importance==='number')meta.push('重要 '+r.email_importance.toFixed(1));
+    // ↗ 回源頭：只信任 https 連結（email-intake 已白名單到 mail.google.com）
+    const linkHtml=(r.link&&/^https:\/\//i.test(r.link))?' <a class="linkicon" href="'+esc(r.link)+'" target="_blank" rel="noopener noreferrer" title="開啟來源">↗</a>':'';
     return '<div class="listrow stagerow" data-id="'+r.id+'">'
-      +'<span class="lmain"><span class="lname">'+esc(r.notes||r.name||'')+'</span>'
-      +'<span class="lnote">'+(r.source==='slack'?'來自 Slack · ':'')+'卡在 '+esc(wl)+'</span></span>'
+      +'<span class="lmain"><span class="lname">'+esc(r.name||r.notes||'')+linkHtml+'</span>'
+      +(r.notes&&r.notes!==r.name?'<span class="lnote" style="opacity:.75">'+esc(r.notes)+'</span>':'')
+      +'<span class="lnote">'+meta.join(' · ')+'</span></span>'
       +'<span class="stageact">'
       +'<button class="btn btn-primary btn-sm" data-act="accept">接受</button>'
       +'<button class="btn btn-danger btn-sm" data-act="reject">拒絕</button></span></div>';
