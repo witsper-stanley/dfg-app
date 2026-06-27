@@ -719,7 +719,7 @@ function renderStaging(rows){
   stagingRows=rows;
   const box=$('stagingCard');if(!box)return;
   const tab=$('stagingTabCount');if(tab){tab.textContent=rows.length;tab.style.display=rows.length?'':'none';}
-  if(!rows.length){box.innerHTML='<div class="listempty">沒有待審項目。<br>在 Slack 對訊息按 🙋／🧔／🔑 就會出現在這裡。</div>';return;}
+  if(!rows.length){box.innerHTML='<div class="listempty">沒有待審項目。<br>在 Slack 任一訊息點「⋯」→「送到對焦圖」，就會出現在這裡。</div>';return;}
   box.innerHTML=rows.map(r=>{
     const who=blockerToWho(r.blocker_id),wl=WHO[who]?WHO[who].label:'?';
     return '<div class="listrow stagerow" data-id="'+r.id+'">'
