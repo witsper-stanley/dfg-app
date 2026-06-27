@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>專案對焦圖</title>
+<title>任務對焦圖</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
@@ -148,7 +148,7 @@ body.ready .track{transition:transform .5s var(--ease);}
 .empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
   padding:0 36px;font-size:13px;color:var(--muted);line-height:1.7;pointer-events:none;z-index:5;gap:4px;}
 
-/* ───────── 專案管理頁 ───────── */
+/* ───────── 任務管理頁 ───────── */
 .projcard{flex:1;min-width:0;min-height:0;max-width:940px;display:flex;flex-direction:column;padding:26px 28px 20px;}
 .dashcard{flex:1;min-width:0;min-height:0;max-width:980px;display:flex;flex-direction:column;padding:32px 36px;overflow:auto;}
 .dashhead{flex:none;margin-bottom:4px;}
@@ -311,14 +311,14 @@ select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(41,171,226,.16);
   <div class="head">
     <div class="head-l">
       <div class="eyebrow">WitsPer · 對齊工具</div>
-      <div class="title">專案對焦圖</div>
+      <div class="title">任務對焦圖</div>
       <div class="sub">一個 Project 一個點 · 槓桿 × 能量 · 顏色標可逆性</div>
     </div>
     <div class="tabwrap" id="tabwrap">
       <span class="tabpill" id="tabpill"></span>
       <button class="tabbtn active" data-view="map">對焦圖</button>
       <button class="tabbtn" data-view="dashboard">儀表板</button>
-      <button class="tabbtn" data-view="projects">專案</button>
+      <button class="tabbtn" data-view="projects">任務</button>
       <button class="tabbtn" data-view="methods">三個方法</button>
     </div>
     <div class="authchip" id="authChip" hidden></div>
@@ -346,7 +346,7 @@ select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(41,171,226,.16);
                 <span class="lg"><span class="sw" style="background:var(--oneway)"></span>單向門 I</span>
                 <span class="lg"><span class="sw" style="background:var(--twoway)"></span>雙向門 II</span>
               </div>
-              <button class="btn btn-primary btn-sm" id="addBtnMap">＋ 新增專案</button>
+              <button class="btn btn-primary btn-sm" id="addBtnMap">＋ 新增任務</button>
             </div>
           </div>
           <div class="graphbox">
@@ -375,7 +375,7 @@ select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(41,171,226,.16);
       <!-- 儀表板 -->
       <section class="slide" data-view="dashboard">
         <div class="card dashcard">
-          <div class="dashhead"><div class="ph-title">儀表板</div><div class="ph-sub">一眼掌握瓶頸與分布 · 共 <span id="totalN">0</span> 個專案</div></div>
+          <div class="dashhead"><div class="ph-title">儀表板</div><div class="ph-sub">一眼掌握瓶頸與分布 · 共 <span id="totalN">0</span> 個任務</div></div>
           <div class="dash-sec">瓶頸 · 球在誰手上</div>
           <div class="whostats">
             <div class="wstat me"><div class="ws-top"><span class="s-dot" style="background:#29ABE2"></span>卡在我（Stanley）</div><div class="ws-num" data-w="me">0</div><div class="ws-desc">球在你手上，能自己推</div></div>
@@ -391,15 +391,15 @@ select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(41,171,226,.16);
         </div>
       </section>
 
-      <!-- 專案清單 -->
+      <!-- 任務清單 -->
       <section class="slide" data-view="projects">
         <div class="card projcard">
           <div class="projhead">
-            <div><div class="ph-title">所有專案</div><div class="ph-sub">點任一列可編輯／刪除 · 拖曳定位請到「對焦圖」</div></div>
+            <div><div class="ph-title">所有任務</div><div class="ph-sub">點任一列可編輯／刪除 · 拖曳定位請到「對焦圖」</div></div>
             <div class="ph-actions">
               <button class="btn btn-sm" id="exportBtn">匯出</button>
               <button class="btn btn-sm" id="batchBtn">匯入 / 批次</button>
-              <button class="btn btn-primary btn-sm" id="addBtnProj">＋ 新增專案</button>
+              <button class="btn btn-primary btn-sm" id="addBtnProj">＋ 新增任務</button>
             </div>
           </div>
           <div class="projhead" style="margin:2px 0 8px;align-items:center">
@@ -407,7 +407,7 @@ select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(41,171,226,.16);
             <button class="btn btn-sm" id="stagingRefresh">↻ 重整</button>
           </div>
           <div class="listcard" id="stagingCard" style="max-height:30vh;margin-bottom:18px"></div>
-          <div class="ph-title" style="font-size:14px;margin-bottom:8px">所有專案</div>
+          <div class="ph-title" style="font-size:14px;margin-bottom:8px">所有任務</div>
           <div class="listcard" id="listCard"></div>
           <div class="projfoot"><span class="note">資料存在 Supabase（登入後自動同步、多人共用）；本機留一份離線快取。</span>
             <button class="btn btn-danger btn-sm" id="clearBtn">清空全部</button></div>
@@ -458,9 +458,9 @@ select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(41,171,226,.16);
 <!-- 新增 / 編輯（共用） -->
 <div class="backdrop" id="itemBackdrop">
   <div class="modal">
-    <h3 id="itemTitle">新增專案</h3>
+    <h3 id="itemTitle">新增任務</h3>
     <div class="msub" id="itemSub">填名稱與可逆性，加入後到「對焦圖」拖到位置。</div>
-    <div class="field"><label>專案名稱（必填）</label><input type="text" id="itemName" placeholder="例如：NetSuite 整合"><div class="err" id="itemErr">請輸入名稱。</div></div>
+    <div class="field"><label>任務名稱（必填）</label><input type="text" id="itemName" placeholder="例如：NetSuite 整合"><div class="err" id="itemErr">請輸入名稱。</div></div>
     <div class="field"><label>備註（選填，牽涉金額寫這）</label><input type="text" id="itemNote"></div>
     <div class="field"><label>來源連結（選填 · Monday／Slack／Doc）</label><input type="text" id="itemLink" placeholder="https://…"><div class="err" id="itemLinkErr">連結需以 http:// 或 https:// 開頭。</div></div>
     <div class="field"><label>可逆性（Bezos 單向門 / 雙向門）</label>
@@ -513,7 +513,7 @@ select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(41,171,226,.16);
 <div class="authgate" id="authGate" hidden>
   <div class="authbox">
     <div class="autheyebrow">WitsPer · 對齊工具</div>
-    <h2>登入專案對焦圖</h2>
+    <h2>登入任務對焦圖</h2>
     <p class="authdesc">用公司 email + 密碼登入。資料存在 Supabase、受權限保護，登入後才看得到。每台裝置只需登入一次。</p>
     <div class="field"><label>Email</label><input id="authEmail" type="email" placeholder="you@witsper.com" autocomplete="email"></div>
     <div class="field" id="authNameField" hidden><label>顯示名稱（建立帳號用）</label><input id="authName" type="text" placeholder="你的名字"></div>
@@ -557,7 +557,7 @@ const ZONES={
 };
 const SAMPLES=[
   {label:'NetSuite整合', note:'動到全公司財務流程，上了極難回頭。', x:0.27,y:0.18,rev:'oneway',who:'stanley',link:'https://www.netsuite.com',sample:true},
-  {label:'清倉專案',     note:'清掉舊庫存、見效快又有勁，做錯能停。', x:0.72,y:0.20,rev:'twoway',who:'stanley',sample:true},
+  {label:'清倉任務',     note:'清掉舊庫存、見效快又有勁，做錯能停。', x:0.72,y:0.20,rev:'twoway',who:'stanley',sample:true},
   {label:'資深採購聘用', note:'找對人槓桿很高，但聘錯難收。',     x:0.30,y:0.44,rev:'oneway',who:'henry',sample:true},
   {label:'OKR週追蹤',    note:'短期槓桿低，但讓團隊上軌道，隨時可調。',x:0.78,y:0.58,rev:'twoway',who:'key',sample:true},
   {label:'月訂閱工具',   note:'瑣碎、可外包，綁約短、中途退得掉。', x:0.30,y:0.80,rev:'twoway',who:'others',sample:true},
@@ -776,7 +776,7 @@ function updateUndoBtns(){const u=$('undoBtn'),r=$('redoBtn');if(u)u.disabled=!u
 function render(){
   dotsLayer.innerHTML='';
   $('emptyMsg').style.display=data.length?'none':'flex';
-  $('emptyMsg').innerHTML='<div>還沒有任何 Project。</div><div style="font-size:11.5px;color:var(--faint)">按右上「＋ 新增專案」開始。</div>';
+  $('emptyMsg').innerHTML='<div>還沒有任何 Project。</div><div style="font-size:11.5px;color:var(--faint)">按右上「＋ 新增任務」開始。</div>';
   data.forEach((d,i)=>{
     const el=document.createElement('div');
     el.className=matchWho(d)?'dot':'dot dim';el.style.left=(d.x*100)+'%';el.style.top=(d.y*100)+'%';
@@ -806,7 +806,7 @@ function counts(){
 }
 function renderList(){
   const box=$('listCard');
-  if(!data.length){box.innerHTML='<div class="listempty">目前沒有專案。<br>按「＋ 新增專案」加入第一個。</div>';return;}
+  if(!data.length){box.innerHTML='<div class="listempty">目前沒有任務。<br>按「＋ 新增任務」加入第一個。</div>';return;}
   box.innerHTML=data.map(d=>{
     const z=zoneOf(d.x,d.y), w=WHO[d.who]?d.who:'stanley';
     return '<div class="listrow" data-id="'+d.id+'" tabindex="0">'
@@ -897,7 +897,7 @@ let editing=null,itemRev='twoway',pendingDelete=false;
 function openItem(id){
   const d=id?data.find(x=>x.id===id):null;
   editing=id||null;pendingDelete=false;
-  $('itemTitle').textContent=d?'編輯專案':'新增專案';
+  $('itemTitle').textContent=d?'編輯任務':'新增任務';
   $('itemSub').textContent=d?('目前落在 '+ZONES[zoneOf(d.x,d.y)].name+' 象限'):'填名稱與可逆性，加入後到「對焦圖」拖到位置。';
   $('itemName').value=d?d.label:'';
   $('itemNote').value=d?(d.note||''):'';
@@ -1039,7 +1039,7 @@ function buildExport(){
     return d.label+' | '+(d.note||'')+' | '+(d.rev==='oneway'?'單向':'雙向')+' | '+WHO[w].label+(d.link?(' | '+d.link):'');}).join('\n');
 }
 function openExport(){
-  if(!data.length){alert('目前沒有專案可匯出。');return;}
+  if(!data.length){alert('目前沒有任務可匯出。');return;}
   exportFmt='text';setSegF();$('exportText').value=buildExport();
   $('exportBackdrop').classList.add('on');
 }
@@ -1059,21 +1059,21 @@ function downloadExport(){
 }
 /* 把整個 app + 目前清單包成單一自帶資料的 HTML,給別人雙擊開就看到 */
 function downloadShareHTML(){
-  if(!data.length){alert('目前沒有專案可分享。');return;}
+  if(!data.length){alert('目前沒有任務可分享。');return;}
   const seed=JSON.stringify(data.map(d=>({label:d.label,note:d.note||'',x:+(+d.x).toFixed(4),y:+(+d.y).toFixed(4),rev:d.rev,who:WHO[d.who]?d.who:'stanley',link:d.link||''}))).replace(/<\//g,'<\\/');
   const inject='<script>window.__SHARED__='+seed+';<\/script>';
   let html='<!DOCTYPE html>\n'+document.documentElement.outerHTML;
   html=html.replace('</title>','</title>\n'+inject);
   const blob=new Blob([html],{type:'text/html;charset=utf-8'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);
-  a.download='專案對焦圖_分享.html';document.body.appendChild(a);a.click();
+  a.download='任務對焦圖_分享.html';document.body.appendChild(a);a.click();
   setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},100);
 }
 
 /* ── 清空 ── */
 function clearAll(){
   if(!data.length)return;
-  if(!window.confirm('確定清空所有專案?（可用 Undo 復原）'))return;
+  if(!window.confirm('確定清空所有任務?（可用 Undo 復原）'))return;
   snapshot();
   data=[];save();render();
 }
@@ -1089,7 +1089,7 @@ function applyView(){
   $('track').style.transform='translateX(-'+(idx*(100/VIEWS.length))+'%)';
   document.querySelectorAll('.slide').forEach(s=>s.classList.toggle('on',s.dataset.view===activeView));
   document.querySelectorAll('.tabbtn').forEach(b=>b.classList.toggle('active',b.dataset.view===activeView));
-  if(activeView==='projects'&&session)loadStaging();   // 進專案頁順手刷新待審
+  if(activeView==='projects'&&session)loadStaging();   // 進任務頁順手刷新待審
   positionPill();syncHeight();
 }
 function positionPill(){
