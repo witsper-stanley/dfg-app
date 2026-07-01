@@ -745,7 +745,7 @@ function renderStaging(rows){
   box.innerHTML=rows.map(r=>{
     const who=blockerToWho(r.blocker_id),wl=WHO[who]?WHO[who].label:'?';
     const meta=[];
-    if(r.source==='email')meta.push('來自 Email'); else if(r.source==='slack')meta.push('來自 Slack');
+    if(r.source==='email')meta.push('來自 Email'); else if(r.source==='slack-list')meta.push('來自 Slack 清單'); else if(r.source==='slack')meta.push('來自 Slack');
     meta.push('卡在 '+esc(wl));
     if(r.deadline)meta.push('期限 '+esc(r.deadline));
     if(typeof r.email_importance==='number')meta.push('重要 '+r.email_importance.toFixed(1));
