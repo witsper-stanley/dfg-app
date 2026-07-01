@@ -149,7 +149,7 @@ body.ready .track{transition:transform .5s var(--ease);}
   padding:0 36px;font-size:13px;color:var(--muted);line-height:1.7;pointer-events:none;z-index:5;gap:4px;}
 
 /* ───────── 任務管理頁 ───────── */
-.projcard{flex:1;min-width:0;min-height:0;max-width:940px;display:flex;flex-direction:column;padding:26px 28px 20px;}
+.projcard{flex:1;min-width:0;min-height:0;max-width:1280px;display:flex;flex-direction:column;padding:26px 28px 20px;}
 .dashcard{flex:1;min-width:0;min-height:0;max-width:980px;display:flex;flex-direction:column;padding:32px 36px;overflow:auto;}
 .dashhead{flex:none;margin-bottom:4px;}
 .dash-sec{flex:none;font-family:var(--font-disp);font-size:11px;font-weight:700;letter-spacing:.2em;color:var(--faint);text-transform:uppercase;margin:20px 0 13px;}
@@ -180,6 +180,10 @@ body.ready .track{transition:transform .5s var(--ease);}
 .listrow:hover{background:var(--page);}
 .listrow + .listrow{border-top:1px solid var(--line-soft);}
 .listrow:focus-visible{outline:2px solid var(--blue);outline-offset:-2px;}
+/* 寬螢幕：待審 / 所有任務 改多欄卡片牆（auto-fill，窄螢幕自動回單欄），一次多看到一些 */
+.listcard.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(430px,1fr));gap:8px;align-content:start;border:none;background:transparent;padding:2px;}
+.listcard.grid .listrow{border:1px solid var(--line);border-radius:10px;}
+.listcard.grid .listrow + .listrow{border-top-color:var(--line);}
 .ldot{width:12px;height:12px;border-radius:50%;flex:none;box-shadow:0 1px 2px rgba(20,22,28,.18);}
 .lmain{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}
 .lname{font-size:14px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
@@ -407,9 +411,9 @@ select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(41,171,226,.16);
             <div class="ph-title" style="font-size:14px">待審收件匣 <span id="stagingTabCount" class="zcount" style="display:none;background:var(--amber)">0</span></div>
             <button class="btn btn-sm" id="stagingRefresh">↻ 重整</button>
           </div>
-          <div class="listcard" id="stagingCard" style="max-height:30vh;margin-bottom:18px"></div>
+          <div class="listcard grid" id="stagingCard" style="max-height:40vh;margin-bottom:18px"></div>
           <div class="ph-title" style="font-size:14px;margin-bottom:8px">所有任務</div>
-          <div class="listcard" id="listCard"></div>
+          <div class="listcard grid" id="listCard"></div>
           <div class="projfoot"><span class="note">資料存在 Supabase（登入後自動同步、多人共用）；本機留一份離線快取。</span>
             <button class="btn btn-danger btn-sm" id="clearBtn">清空全部</button></div>
         </div>
