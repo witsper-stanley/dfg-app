@@ -1020,7 +1020,7 @@ function saveItem(){
   }else{
     const item={id:uid(),label:name,note:note,x:0.5,y:0.5,rev:itemRev,who:who,link:link};
     data.push(item);save();closeItem();
-    setView('map');           // 加完直接帶到圖上，方便拖定位
+    // 留在當前分頁（不再強制跳到對焦圖）；新任務先落在圖中央 0.5,0.5，之後到對焦圖拖定位
     render();flashDot(item.id);
   }
 }
