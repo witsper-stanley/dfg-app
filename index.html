@@ -757,7 +757,7 @@ function renderStaging(rows){
     // ↗ 回源頭：只信任 https 連結（email-intake 已白名單到 mail.google.com）
     const linkHtml=(r.link&&/^https:\/\//i.test(r.link))?' <a class="linkicon" href="'+esc(r.link)+'" target="_blank" rel="noopener noreferrer" title="開啟來源">↗</a>':'';
     return '<div class="listrow stagerow" data-id="'+r.id+'">'
-      +'<span class="lmain"><span class="lname">'+esc(r.name||r.notes||'')+linkHtml+'</span>'
+      +'<span class="lmain"><span class="lname" style="display:flex;align-items:center;gap:5px"><span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(r.name||r.notes||'')+'</span>'+linkHtml+'</span>'
       +(r.notes&&r.notes!==r.name?'<span class="lnote" style="opacity:.75">'+esc(r.notes)+'</span>':'')
       +'<span class="lnote">'+meta.join(' · ')+'</span></span>'
       +'<span class="stageact">'
