@@ -182,7 +182,7 @@ body.ready .track{transition:transform .5s var(--ease);}
 .listrow:focus-visible{outline:2px solid var(--blue);outline-offset:-2px;}
 /* 寬螢幕：待審 / 所有任務 改多欄卡片牆（auto-fill，窄螢幕自動回單欄），一次多看到一些 */
 .listcard.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(430px,1fr));gap:8px;align-content:start;border:none;background:transparent;padding:2px;}
-.listcard.grid .listrow{border:1px solid var(--line);border-radius:10px;}
+.listcard.grid .listrow{border:1px solid var(--line);border-radius:10px;padding:10px 14px;}
 .listcard.grid .listrow + .listrow{border-top-color:var(--line);}
 .ldot{width:12px;height:12px;border-radius:50%;flex:none;box-shadow:0 1px 2px rgba(20,22,28,.18);}
 .lmain{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}
@@ -411,7 +411,7 @@ select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(41,171,226,.16);
             <div class="ph-title" style="font-size:14px">待審收件匣 <span id="stagingTabCount" class="zcount" style="display:none;background:var(--amber)">0</span></div>
             <button class="btn btn-sm" id="stagingRefresh">↻ 重整</button>
           </div>
-          <div class="listcard grid" id="stagingCard" style="max-height:40vh;margin-bottom:18px"></div>
+          <div class="listcard grid" id="stagingCard" style="flex:none;max-height:44vh;margin-bottom:18px"></div>
           <div class="ph-title" style="font-size:14px;margin-bottom:8px">所有任務</div>
           <div class="listcard grid" id="listCard"></div>
           <div class="projfoot"><span class="note">資料存在 Supabase（登入後自動同步、多人共用）；本機留一份離線快取。</span>
